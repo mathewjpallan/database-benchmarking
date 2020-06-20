@@ -29,8 +29,12 @@ if (cluster.isMaster) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }))
 
-    app.listen(9009, () => {
+    var server = app.listen(9009, () => {
         console.log("Server running on port 9009");
+    });
+    server.on('connection', function (socket) {
+        console.log("New incoming connection")
+        socket.setTimeout(200 * 1000);
     });
 
     app.get("/v1/readUser/:id", (req, res, next) => {
@@ -43,7 +47,7 @@ if (cluster.isMaster) {
             if (results.rowCount > 0)
                 res.status(200).send(`User retrieved : ${results.rows[0].id} ${results.rows[0].user_name} ${results.rows[0].user_details}`)
             else 
-                res.status(404)
+                res.status(404).send('NotFound')
         })
     });
 
