@@ -31,18 +31,48 @@ if (cluster.isMaster) {
     });
 
     app.get("/v1/readUser/:id", (req, res, next) => {
-        const query = 'SELECT * FROM users WHERE id = ?';
         let id = req.params.id;
-
-        client.get({
+        // There are multiple options here - to get by the document id or to search by the id attribute. The commented code below and the response send can be tried for document id get.
+        // 1) Direct get by document id
+        //    client.get({
+        //     index: 'testindex',
+        //     id: id
+        // }, 
+        // 2) Search by id   
+        // client.search({
+        //     index: 'testindex',
+        //     body: {
+        //         query: {
+        //             bool: {
+        //                 must: {
+        //                     match: { "id": id }
+        //                 }
+        //             }
+        //         },
+        //     }
+        // },
+        // 3) Search by term
+        client.search({
             index: 'testindex',
-            id: id
-        }, (err, result) => {
+            body: {
+                query: {
+                    bool: {
+                        filter: {
+                            term: { "id.raw": id }
+                        }
+                    }
+                },
+            }
+        }, 
+        (err, result) => {
             if (err) {
                 console.log(err)
                 res.status(404).send('NotFound')
             } else {
-                res.status(200).send('User retrieved :' + JSON.stringify(result.body._source));
+                // The below is for the get by document id
+                //res.status(200).send('User retrieved :' + JSON.stringify(result.body._source));
+                //The below is for the search/filter
+                res.status(200).send('User retrieved :' + JSON.stringify(result.body.hits.hits[0]._source));
             }
         })
     });
