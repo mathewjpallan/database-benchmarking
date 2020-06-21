@@ -7,7 +7,7 @@ docker network create api_net
 
 ```
 
-2. Run postgres as a docker container with a mounted data directory and limiting to 4 cpu cores
+2. Run postgres as a docker container with a mounted data directory and limiting to 3 cpu cores
 ```
 docker run --rm --cpus="3" --network api_net --name postgres -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 -v /home/install/databases/docker/postgres:/var/lib/postgresql/data  postgres:12.3-alpine
 ```

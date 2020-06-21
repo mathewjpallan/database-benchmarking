@@ -7,12 +7,12 @@ docker network create api_net
 
 ```
 
-2. Run cassandra as a docker container with a mounted data directory and limiting to 4 cpu cores
+2. Run cassandra as a docker container with a mounted data directory and limiting to 3 cpu cores
 ```
 docker run --rm --cpus="3" --network api_net --name cassandra -d -p 9042:9042 -v /home/install/databases/docker/cassandra:/var/lib/cassandra  cassandra:3.11.6
 ```
 
-3. Attach to the postgres container to run psql commands
+3. Attach to the database container to run commands
 
 ```
 docker exec -it cassandra /bin/bash
@@ -33,7 +33,10 @@ docker run --rm --cpus="5" --network api_net --name cassandracrud -d -p 9009:900
 
 ### Otheruseful commands
 docker stats to see docker container utilization
-To check row count - copy testkeyspace.users (id) to '/dev/null'
+
+The following commands need to be run on cqlsh after switching to the testkeyspace
+To check row count after the test - copy testkeyspace.users (id) to '/dev/null'
+To truncate users, before a run - truncate table users
 
 ### Perf testing
 The jmter script is available in the perftest folder and it can be used to test the addUser and readUser endpoints
