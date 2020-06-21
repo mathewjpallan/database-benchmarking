@@ -19,7 +19,7 @@ v1/addUser POST API is used to benchmark the writes with the following payload -
 - The database & the nodejs APIs were run as docker containers. The database was limited to 3 cores and the API was limited to 5 cores as can be seen in the individual documentation. 
 - Both the containers were running on the same machine along with the Jmeter (ver 5.3) instance.
 - Machine had 6 cores (Intel(R) Core(TM) i7-8850H CPU @ 2.60GHz) with 2 threads per core and 32 GB of RAM
-- None of the databases/API containers was using more than 1 GB of RAM during the test although there were no limits applied
+- None of the databases/API containers was using more than 4 GB of RAM during the test although there were no limits applied
 
 ## Test observations
 The test observations are the TPS/avg response time while writing 20 million records to the databases. The reads were done against the 20 million records that were added during the write benchmarking
